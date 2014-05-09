@@ -1,0 +1,90 @@
+[%#
+  # This Source Code Form is subject to the terms of the Mozilla Public
+  # License, v. 2.0. If a copy of the MPL was not distributed with this
+  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  #
+  # Copyright (C) 2014 Jolla Ltd.
+  # Contact: Pami Ketolainen <pami.ketolainen@jolla.com>
+  #%]
+
+[% PROCESS "global/variables.none.tmpl" %]
+
+[% WRAPPER bb/wraplist.html.tmpl
+    title = "${terms.Bug} activity graph"
+%]
+
+<table id="legend" style="float:right; border: solid 1px;">
+  <tr><th colspan="2">Legend</th></tr>
+  [% FOREACH c IN graph_colours %]
+  <tr>
+    <td style="text-align: right;">[% c.0 FILTER html %]</td>
+    <td>
+      <span style="background-color: hsl(0, 0%, [% c.1 * 100 %]%);">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </td>
+  </tr>
+  [% END %]
+  <tr>
+    <td style="text-align: right;">Last modified</td>
+    <td>
+    [% FOREACH x IN [ 0 .. 4 ] ~%]
+    [% h = (4 - x) / 4 * 0.33 * 360 ~%]
+    <span style="background-color: hsl([% h FILTER format('%d') %], 100%, 50%);">[% x %]</span>
+    [%- ',' UNLESS loop.last %][% END -%]
+    weeks ago</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">Square</td>
+    <td>= In search result</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">Round</td>
+    <td>= Not in search result</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">A&rarr;B</td>
+    <td>= B depends on A</td>
+  </tr>
+
+  <tr><th colspan="2">Options</th></tr>
+  <tr>
+    <td style="text-align: right;">Include</td>
+    <td>
+      <select name="activity_include">
+        <option [% 'selected="selected"' IF activity_inlcude == 'dependson' %]
+          value="dependson">depends on</option>
+        <option [% 'selected="selected"' IF activity_inlcude == 'blocks' %]
+          value="blocks">blocks</option>
+        <option [% 'selected="selected"' IF activity_inlcude == 'all' %]
+          value="all">all</option>
+        <option [% 'selected="selected"' IF activity_inlcude == 'none' %]
+          value="none">only search results</option>
+      </select>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+$(function() {
+  $("[name=activity_include").change(function() {
+    var params = getQueryParams(document.location.search);
+    params.activity_include = $("[name=activity_include]").val();
+    document.location.search = getQueryString(params);
+  })
+})
+</script>
+
+[% FLUSH %]
+<div>
+[% TRY %]
+  [% INSERT $image_map %]
+[% CATCH %]
+<pre class="throw_error">
+Failed to insert image map, contact admin [% Param('maintainer') FILTER html %].
+Info: [% error.info FILTER html %]
+</pre>
+[% END %]
+  <img src="[% image_url %]" alt="Dependency graph" usemap="#G">
+</div>
+
+[% END # WRAPPER %]
