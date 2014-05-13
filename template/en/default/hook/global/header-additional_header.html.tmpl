@@ -1,0 +1,26 @@
+[%#
+  # This Source Code Form is subject to the terms of the Mozilla Public
+  # License, v. 2.0. If a copy of the MPL was not distributed with this
+  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  #
+  # Copyright (C) 2014 Jolla Ltd.
+  # Contact: Pami Ketolainen <pami.ketolainen@jolla.com>
+  #%]
+
+[% IF Param('activitycolorsinplanning') && template.name == 'pages/agiletools/scrum/planning.html.tmpl' %]
+<script type="text/javascript" src="[% 'extensions/ActivityGraph/web/js/bugactivity.js' FILTER mtime %]">
+</script>
+<script type="text/javascript">
+  $(function() {
+    $(document).on("buglistadditem", activityColorOnBugListAdd)
+  })
+</script>
+[% END %]
+
+[% IF template.name == 'list/list.html.tmpl' && displaycolumns.contains('days_since_activity') %]
+<script type="text/javascript" src="[% 'extensions/ActivityGraph/web/js/bugactivity.js' FILTER mtime %]">
+</script>
+<script type="text/javascript">
+  $(buglistActivityColumnFormat)
+</script>
+[% END %]
