@@ -72,7 +72,8 @@ sub activity_graph {
     my $urlbase = Bugzilla->params->{'urlbase'};
 
     print $fh qq/digraph G {
-    graph [rankdir=LR];
+    graph [rankdir=LR, bgcolor="transparent"];
+
     node [URL="${urlbase}show_bug.cgi?id=\\N", style=filled, fillcolor=lightgrey];
     /;
 
