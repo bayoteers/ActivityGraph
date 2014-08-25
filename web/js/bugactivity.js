@@ -12,7 +12,7 @@
  * corresponging rgb(r,g,b) color value for that
  */
 var calculateActivityInfo = function(days_since_activity) {
-    var color = pct2rgb( Math.min(days_since_activity, 14) / 14 )
+    var color = pct2rgb( Math.min(days_since_activity, ACTIVITYDAYSLIMIT) / ACTIVITYDAYSLIMIT )
     color = 'rgb('+color.join(',')+')';
     var rounded = -1;
     var unit = "day";

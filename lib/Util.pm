@@ -15,6 +15,7 @@ use warnings;
 use Bugzilla;
 use Bugzilla::Constants;
 use Bugzilla::Install::Filesystem;
+use Bugzilla::Install::Util qw(install_string);
 use Bugzilla::Util qw(datetime_from trick_taint);
 use Bugzilla::Error;
 use Bugzilla::Status;
@@ -109,6 +110,7 @@ sub activity_graph {
     my $now = time();
     my @closed = reverse map {$_->name} Bugzilla::Status::closed_bug_statuses();
     my %graph_colours = map {$closed[$_] => $_ / $#closed * 0.6 + 0.2} (0..$#closed);
+    my $max = Bugzilla->params->{activitygraphdayslimit};
     foreach my $k (keys(%seen)) {
         # Retrieve bug information from the database
         my ($status, $resolution, $summary, $delta) = $dbh->selectrow_array($sth, undef, $k);
@@ -138,8 +140,8 @@ sub activity_graph {
         if (defined $graph_colours{$status}) {
             push(@params, 'fillcolor="0 0 '.$graph_colours{$status}.'"');
         } else {
-            $delta = ($now - datetime_from($delta)->epoch) / 604800;
-            $delta = min($delta, 4) / 4;
+            $delta = ($now - datetime_from($delta)->epoch) / 86400;
+            $delta = min($delta, $max) / $max;
             my $hue = 0.33 - (0.33 * $delta);
             push(@params, "fillcolor=\"$hue 1 1\"");
         }

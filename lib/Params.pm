@@ -11,11 +11,23 @@ package Bugzilla::Extension::ActivityGraph::Params;
 use strict;
 use warnings;
 
+use Bugzilla::Config::Common qw(check_numeric);
+
 sub get_param_list {
     return ({
             name => 'activitycolorsinplanning',
             type => 'b',
             default => 0,
+        }, {
+            name => 'activitygraphdayslimit',
+            type => 't',
+            default => '14',
+            checker => \&check_numeric
+        }, {
+            name => 'activitybuglistdayslimit',
+            type => 't',
+            default => '14',
+            checker => \&check_numeric
         },
     );
 }

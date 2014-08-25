@@ -27,11 +27,12 @@
   <tr>
     <td style="text-align: right;">Last modified</td>
     <td>
-    [% FOREACH x IN [ 0 .. 4 ] ~%]
-    [% h = (4 - x) / 4 * 0.33 * 360 ~%]
+    [% max = Param('activitygraphdayslimit') %]
+    [% FOREACH x IN [ 0 .. max ] ~%]
+    [% h = (max - x) / max * 0.33 * 360 ~%]
     <span style="background-color: hsl([% h FILTER format('%d') %], 100%, 50%);">[% x %]</span>
     [%- ',' UNLESS loop.last %][% END -%]
-    weeks ago</td>
+    days ago</td>
   </tr>
   <tr>
     <td style="text-align: right;">Square</td>
