@@ -51,7 +51,7 @@ var activityColorOnBugListAdd = function(ev, data)
     var activityColor = $("<li></li>");
     var activitInfo = calculateActivityInfo(data.bug.days_since_activity);
     activityColor.css({
-        'background-color': activitInfo.color,
+        'background-color': data.bug.is_open ? activitInfo.color : 'none',
         'display': 'inline-block',
         'width': '1em',
         'height': '1em',
@@ -66,16 +66,32 @@ var activityColorOnBugListAdd = function(ev, data)
  * Bug list table column formatter
  */
 var buglistActivityColumnFormat = function() {
-    $("table.bz_buglist td.bz_days_since_activity_column").each(function()
-    {
-        var element = $(this);
-        var days = Number(element.text().trim());
-        if (isNaN(days)) return;
-        var info = calculateActivityInfo(days);
-        element.css({
-            'background-color': info.color,
-            'color': 'black'
-        });
-        element.text(info.ago);
-    })
+    var resolution_classes = BB_FIELDS.resolution.values
+            .filter(function(res){return Boolean(res.name)})
+            .map(function(res){return ".bz_" + res.name}).join(',')
+
+    $("table.bz_buglist tr").not(resolution_classes)
+        .children("td.bz_days_since_activity_column").each(function()
+        {
+            var element = $(this);
+            var days = Number(element.text().trim());
+            if (isNaN(days)) return;
+            var info = calculateActivityInfo(days);
+            element.css({
+                'background-color': info.color,
+                'color': 'black'
+            });
+            element.text(info.ago);
+        }
+    )
+    $("table.bz_buglist tr").filter(resolution_classes)
+        .children("td.bz_days_since_activity_column").each(function()
+        {
+            var element = $(this);
+            var days = Number(element.text().trim());
+            if (isNaN(days)) return;
+            var info = calculateActivityInfo(days);
+            element.text(info.ago);
+        }
+    )
 }
