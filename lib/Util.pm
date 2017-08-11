@@ -5,7 +5,7 @@
 # This Source Code Form is "Incompatible With Secondary Licenses", as
 # defined by the Mozilla Public License, v. 2.0.
 #
-# Copyright (C) 2014 Jolla Ltd.
+# Copyright (C) 2014-2017 Jolla Ltd.
 # Contact: Pami Ketolainen <pami.ketolainen@jolla.com>
 
 package Bugzilla::Extension::ActivityGraph::Util;
