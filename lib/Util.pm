@@ -61,7 +61,7 @@ sub activity_graph {
 
     my $webdotdir = bz_locations()->{'webdotdir'};
 
-    my ($fh, $dotfilename) = File::Temp::tempfile("jh_XXXXXXXXXX",
+    my ($fh, $dotfilename) = File::Temp::tempfile("ag_XXXXXXXXXX",
                                                SUFFIX => '.dot',
                                                DIR => $webdotdir,
                                                UNLINK => 0);
@@ -194,7 +194,7 @@ sub cleanup_dotdir {
         warn "Failed to open webdot dir '$webdotdir' for reading: $!";
         return;
     };
-    my @files = grep { /jh_.*(\.dot$|\.png$|\.map)$/ && -f "$webdotdir/$_" } readdir($dh);
+    my @files = grep { /ag_.*(\.dot$|\.png$|\.map)$/ && -f "$webdotdir/$_" } readdir($dh);
     closedir($dh);
     foreach my $f (@files)
     {
